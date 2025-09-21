@@ -6,7 +6,7 @@ from vault_client import VaultClient
 vault = VaultClient()
 creds = vault.get_creds("db_creds")
 
-DATABASE_URL = f"postgresql://{creds['username']}:{creds['password']}@host.docker.internal/movie_booking"
+DATABASE_URL = f"postgresql://{creds['username']}:{creds['password']}@localhost/movie_booking"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
