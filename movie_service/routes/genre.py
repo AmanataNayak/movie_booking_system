@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/genres", tags=["Genre"])
 
-@router.post("/", response_model=GenreOut)
+@router.post("/", response_model=GenreOut, status_code=status.HTTP_201_CREATED)
 def create_genres(genre: GenerCreate, db: Session = Depends(get_db)):
     return create_genre(db, genre)
 
