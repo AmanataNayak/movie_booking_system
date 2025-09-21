@@ -3,6 +3,9 @@ from typing import Annotated
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SECRET_KEY = os.environ['SECRET_KEY']
 ALGORITHM = "HS256"
