@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-
   postgres:
     image: postgres:15-alpine
     container_name: movie-db-postgres
@@ -38,7 +35,46 @@ services:
       - IPC_LOCK
     restart: unless-stopped
 
+  minio:
+    image: minio/minio:latest
+    container_name: movie-s3-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      # --- FOR DEVELOPMENT ONLY ---
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: movie-ml-mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    command:
+      - "mlflow"
+      - "server"
+      - "--host"
+      - "0.0.0.0"
+      - "--backend-store-uri"
+      - "postgresql://user:password@postgres:5432/mlflow_db" # Points to our Postgres container
+      - "--default-artifact-root"
+      - "s3://mlflow"
+    depends_on:
+      - postgres
+      - minio
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:
   vault_data:
+  minio_data:
