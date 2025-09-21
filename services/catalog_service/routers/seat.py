@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, status
-from utility.api_admin import admin_required_for_method
+from iam import admin_required_for_method
 from services.seat import *
 from schemas.seat import SeatOut, SeatUpdate
 from uuid import UUID

@@ -4,7 +4,7 @@ from schemas.showtime import *
 from database import get_db
 from sqlalchemy.orm import Session
 from uuid import UUID
-from utility.api_admin import admin_required_for_method
+from iam import admin_required_for_method
 
 
 router = APIRouter(

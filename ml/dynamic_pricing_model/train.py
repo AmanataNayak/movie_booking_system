@@ -28,12 +28,17 @@ def run_training_pipeline():
     trained_model = model.train_model(X_train, y_train, config['model_params'])
 
     # 4. Model Evaluation
-    model.evaluate_model(trained_model, X_test, y_test)
+    metrics = model.evaluate_model(trained_model, X_test, y_test)
 
     # 5. Model Saving
     # Ensure the 'models' directory exists
     os.makedirs(os.path.dirname(config['model_name']), exist_ok=True)
-    model.save_model(trained_model, config['model_name'])
+    model.save_model_to_registry(
+        model=trained_model,
+        model_name="dynamic-pricing-model", # The name of our model in the registry
+        config=config,
+        metrics=metrics
+    )
 
     print("--- Model Training Pipeline Finished Successfully! 🎉 ---")
 

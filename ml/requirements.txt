@@ -2,3 +2,4 @@ polars
 numpy
 scikit-learn
 pandas
+mlflow

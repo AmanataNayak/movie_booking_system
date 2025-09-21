@@ -1,0 +1,4 @@
+uvicorn
+mlflow
+scikit-learn
+pandas

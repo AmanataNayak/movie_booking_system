@@ -1,6 +1,6 @@
 import os
 from typing import Annotated
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from dotenv import load_dotenv
@@ -39,3 +39,14 @@ async def get_current_user(token: Annotated[str, Depends(ouath2_scheme)]) -> Tok
         raise credentials_exception
 
     return token_data
+
+def admin_required_for_method(methods: list[str]):
+    async def dependency(request: Request, current_user: TokenData = Depends(get_current_user)):
+        if request.method in methods:
+            if current_user.role != "admin":
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Admin privileges required"
+                )
+        return current_user
+    return dependency
