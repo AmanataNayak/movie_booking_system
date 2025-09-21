@@ -6,7 +6,7 @@ load_dotenv()
 class VaultClient:
     def __init__(self, mount_point: str = "secret"):
         self.client = hvac.Client(
-            url=os.environ['VAULT_ADDR'],
+            url=os.environ['VAULT_ADDR'] if not os.getenv('DOCKER_ENV') else os.environ['SERVER_VAULT_ADDR'],
             token=os.environ['VAULT_TOKEN']
         )
         self.mount_point = mount_point

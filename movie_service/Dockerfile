@@ -14,6 +14,7 @@ RUN pip install -r ./common/requirements.txt
 
 COPY .env ./
 EXPOSE 8000
+ENV DOCKER_ENV=true
 
 ENV PYTHONPATH="${PYTHONPATH}:/app/common"
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

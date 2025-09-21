@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from testcontainers.postgres import PostgresContainer
-from auth_service.main import app, get_db
+from main import app, get_db
 
 @pytest.fixture(scope="module")
 def db_engine():
@@ -78,7 +78,7 @@ def test_login_success(client):
         json={"username": "loginuser", "email": "login@example.com", "password": "password123"},
     )
     response = client.post(
-        "/login",
+        "/token",
         data={"username": "loginuser", "password": "password123"}
     )
     assert response.status_code == 200
@@ -93,7 +93,7 @@ def test_login_incorrect_password(client):
         json={"username": "wrongpass", "email": "wrongpass@example.com", "password": "password123"},
     )
     response = client.post(
-        "/login",
+        "/token",
         data={"username": "wrongpass", "password": "incorrect"}
     )
     assert response.status_code == 401
@@ -105,7 +105,7 @@ def test_get_current_user(client):
         "/signup",
         json={"username": "currentuser", "email": "current@example.com", "password": "password123"},
     )
-    login_res = client.post("/login", data={"username": "currentuser", "password": "password123"})
+    login_res = client.post("/token", data={"username": "currentuser", "password": "password123"})
     token = login_res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
     response = client.get("/users/me", headers=headers)

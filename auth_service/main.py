@@ -1,11 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import  OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from typing import Annotated
-from security import SECRET_KEY, ALGORITHM, verify_password, create_access_token
+from security import verify_password, create_access_token
 from database import  get_db
-from models.user import User
 import services
 from schemas.user import *
 from iam import get_current_user

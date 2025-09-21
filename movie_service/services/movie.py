@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 from models.genres import Genre
 from models.movies import Movie
-from models.showtimes import ShowTime
 from schemas.movie import *
 
 def get_movie(db: Session, movie_id: UUID) -> Movie | None:

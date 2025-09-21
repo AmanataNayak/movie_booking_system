@@ -18,11 +18,3 @@ CREATE TABLE movie_genres (
     genre_id UUID NOT NULL REFERENCES genres(id) ON DELETE CASCADE,
     PRIMARY KEY (movie_id, genre_id)
 );
-
-CREATE Table showtimes(
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    movie_id UUID NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    created_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);

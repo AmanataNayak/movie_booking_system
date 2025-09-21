@@ -1,6 +1,6 @@
 import pytest
 from testcontainers.postgres import PostgresContainer
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database import get_db, Base
 from fastapi.testclient import TestClient
