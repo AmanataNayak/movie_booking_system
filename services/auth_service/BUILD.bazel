@@ -1,0 +1,38 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+
+py_library(
+    name = "auth_lib",
+    srcs = glob(
+        ["*.py"],
+        exclude = ["main.py"],
+    ) + glob([
+        "models/*.py",
+        "schemas/*.py",
+        "utillity/*.py",
+    ]),
+    deps = [
+        "//common:common_lib",
+        "@pypi//bcrypt",
+        "@pypi//pydantic",
+    ],
+)
+
+py_binary(
+    name = "auth_main",
+    srcs = ["main.py"],
+    main = "main.py",
+    deps = [":auth_lib"],
+    imports = ["."],
+)
+
+py_test(
+    name = "auth_tests",
+    srcs = glob(["tests/*.py"]),
+    deps = [
+        ":auth_lib",
+        "@pypi//httpx",
+        "@pypi//pytest",
+        "@pypi//testcontainers",
+    ],
+)
+

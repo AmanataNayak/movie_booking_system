@@ -1,0 +1,24 @@
+# common/BUILD.bazel
+
+load("@rules_python//python:defs.bzl", "py_library")
+
+# This target bundles all Python files in 'common' into a reusable library.
+py_library(
+    name = "common_lib",
+    srcs = glob(["*.py"]),
+    # Makes the library visible to any other package in the project.
+    visibility = ["//visibility:public"],
+    # Lists the PyPI dependencies needed by this library.
+    deps = [
+        "@pypi//fastapi",
+        "@pypi//hvac",
+        "@pypi//passlib",
+        "@pypi//psycopg2_binary",
+        "@pypi//python_jose",
+        "@pypi//python_multipart",
+        "@pypi//pyyaml",
+        "@pypi//redis",
+        "@pypi//sqlalchemy",
+        "@pypi//python_dotenv"
+    ],
+)

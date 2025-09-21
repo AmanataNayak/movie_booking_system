@@ -4,3 +4,7 @@
 .env
 /mlartifacts/
 /mlruns/
+/bazel-bin/
+/bazel-movie_booking_system/
+/bazel-out/
+/bazel-testlogs/
