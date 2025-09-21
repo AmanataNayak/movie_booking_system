@@ -1,0 +1,23 @@
+# General Settings
+model_name: "model/pricing_model.joblib"
+random_state: 42
+
+# Data Generation Settings
+num_samples: 5000
+
+# Feature Engineering Settings
+features:
+  - "time_of_day"
+  - "day_of_week"
+  - "days_since_release"
+  - "movie_popularity_score"
+  - "is_weekend"
+  - "is_peak_hours"
+target: "occupancy_percentage"
+
+# Model Training Settings
+test_size: 0.2
+model_params:
+  n_estimators: 100
+  random_state: 42 # Can reference other values, but keeping it simple
+  n_jobs: -1

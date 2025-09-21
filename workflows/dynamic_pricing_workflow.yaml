@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: simple-training-run-
+spec:
+  entrypoint: run-training-container
+
+  templates:
+  - name: run-training-container
+    container:
+      image: dynamic_pricing_train
+      command: [python, -m, src.pipeline]
