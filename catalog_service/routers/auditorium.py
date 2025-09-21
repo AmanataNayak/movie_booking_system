@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from services.auditorium import *
 from schemas.auditorium import *
 from database import get_db
