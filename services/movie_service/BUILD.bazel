@@ -1,36 +1,36 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 
 py_library(
-    name = "auth_lib",
+    name = "movie_lib",
     srcs = glob(
         ["*.py"],
         exclude = ["main.py"],
     ) + glob([
         "models/*.py",
         "schemas/*.py",
-        "utillity/*.py",
+        "routes/*.py",
+        "services/*.py"
     ]),
     deps = [
         "//common:common_lib",
-        "@pypi//bcrypt",
         "@pypi//pydantic",
     ],
 )
 
 py_binary(
-    name = "auth_main",
+    name = "movie_main",
     srcs = ["main.py"],
     main = "main.py",
-    deps = [":auth_lib"],
+    deps = [":movie_lib"],
     imports = ["."],
 )
 
 py_test(
-    name = "auth_tests",
+    name = "movie_tests",
     srcs = glob(["tests/*.py"]),
-    main="tests/test_auth.py",
+    main="tests/run_tests.py",
     deps = [
-        ":auth_lib",
+        ":movie_lib",
         "@pypi//httpx",
         "@pypi//pytest",
         "@pypi//testcontainers",
