@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
-from schemas.reservation import ReservationBase, ReservationOut
+from schemas.reservation import ReservationBase, ReservationOut, AllAvailableSeats
 from services.reservations import hold_reservation, confirm_reservation, cancel_reservation, list_available_seats
 from common.iam import get_current_user, TokenData
 
@@ -23,7 +23,7 @@ def confirm(reservation_id: str, db: Session = Depends(get_db), user: TokenData 
 def cancel(reservation_id: str, db: Session = Depends(get_db), user: TokenData = Depends(get_current_user)):
     return cancel_reservation(db, reservation_id, user.user_id)
 
-@router.get("/{showtime_id}/available-seats")
+@router.get("/{showtime_id}/available-seats", response_model=list[AllAvailableSeats])
 def available_seats(showtime_id: str, db: Session = Depends(get_db)):
     return list_available_seats(db, showtime_id)
 

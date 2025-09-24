@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from fastapi import HTTPException, status
 from datetime import datetime, timedelta
 from models.reservation import Reservations, ReservationStatus
@@ -89,22 +90,22 @@ def expire_old_reservations(db: Session):
 
 def list_available_seats(db: Session, showtime_id: str):
     # all seats in auditorium of this showtime
-    all_seats = db.execute("""
-        SELECT s.id, s.row_label, s.seat_number
-        FROM seats s
+    get_all_seat_sql = text("""
+        SELECT s.id, s.row_label , s.seat_number FROM seats s
         JOIN auditoriums a ON a.id = s.auditorium_id
         JOIN showtimes st ON st.auditorium_id = a.id
-        WHERE st.id = :showtime_id
-    """, {"showtime_id": showtime_id}).fetchall()
+        WHERE st.id = :showtime_id                  
+    """)
+    all_seats = db.execute(get_all_seat_sql, {"showtime_id": showtime_id}).fetchall()
 
     # reserved seats (not expired/cancelled)
-    reserved = db.execute("""
-        SELECT rs.seat_id
-        FROM reserved_seats rs
+    reserved_seat_sql = text("""
+        SELECT rs.seat_id FROM reserved_seats rs
         JOIN reservations r ON r.id = rs.reservation_id
         WHERE r.showtime_id = :showtime_id
         AND r.status IN ('hold', 'confirmed')
-    """, {"showtime_id": showtime_id}).fetchall()
+    """)
+    reserved = db.execute(reserved_seat_sql, {"showtime_id": showtime_id}).fetchall()
 
     reserved_ids = {r.seat_id for r in reserved}
     return [s for s in all_seats if s.id not in reserved_ids]

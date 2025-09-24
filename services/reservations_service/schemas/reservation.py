@@ -13,3 +13,10 @@ class ReservationOut(BaseModel):
     status: ReservationStatus
 
     model_config = ConfigDict(from_attributes=True)
+
+class AllAvailableSeats(BaseModel):
+    id: UUID4
+    row_label: str
+    seat_number: int
+
+    model_config = ConfigDict(from_attributes=True)
