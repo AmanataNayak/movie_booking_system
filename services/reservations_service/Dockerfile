@@ -7,7 +7,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the service code
-COPY services/auth_service/ ./
+COPY services/reservations_service/ ./
 # Copy common utils
 COPY common/ ./common/
 

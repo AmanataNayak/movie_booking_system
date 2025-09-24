@@ -4,6 +4,7 @@ from fastapi import HTTPException, status, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from dotenv import load_dotenv
+from uuid import UUID
 
 load_dotenv()
 
@@ -17,7 +18,8 @@ class TokenData(object):
     """
     A simple container for token payload data
     """
-    def __init__(self, username: str | None = None, role: str | None = None):
+    def __init__(self, user_id: str, username: str | None = None, role: str | None = None):
+        self.user_id = user_id
         self.username = username
         self.role = role
 
@@ -30,11 +32,12 @@ async def get_current_user(token: Annotated[str, Depends(ouath2_scheme)]) -> Tok
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
+        user_id= payload.get("sub")
         role: str = payload.get("role")
+        username: str = payload.get("username")
         if username is None or role is None:
             raise credentials_exception
-        token_data = TokenData(username=username, role=role)
+        token_data = TokenData(user_id=user_id, username=username, role=role)
     except JWTError:
         raise credentials_exception
 

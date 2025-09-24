@@ -1,3 +1,4 @@
+import os
 import redis
 import pickle
 
@@ -5,7 +6,7 @@ class Cache:
     def __init__(self):
         try:
             self.client: redis.Redis | None = redis.Redis(
-                host="localhost",
+                host="host.docker.internal" if "DOCKER_ENV" in os.environ else "localhost",
                 port=6379,
                 db=0
             )

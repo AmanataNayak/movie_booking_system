@@ -3,14 +3,13 @@ FROM python:3.13-slim
 WORKDIR /app
 
 # Copy requirements and install
-COPY services/catalog_service/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the service code
 COPY services/catalog_service/ ./
 # Copy common utils
 COPY common/ ./common/
-RUN pip install -r ./common/requirements.txt
 
 COPY .env ./
 EXPOSE 8000

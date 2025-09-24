@@ -6,12 +6,11 @@ from security import verify_password, create_access_token
 from database import  get_db
 import services
 from schemas.user import *
-from iam import get_current_user
+from iam import get_current_user, TokenData
 
 app = FastAPI()
 
 ouath2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
 
 
 @app.post("/signup", response_model=UserOut, status_code=status.HTTP_201_CREATED)
@@ -35,13 +34,14 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
         )
 
     access_token = create_access_token(
-        data={"sub": user.username, "role": user.role.value}
+        # type UUID can't be serialize into json
+        data={"sub": str(user.id), "username": user.username, "role": user.role.value}
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/users/me", response_model=UserOut)
-async def read_users_me(current_user = Depends(get_current_user), db: Session = Depends(get_db)):
+async def read_users_me(current_user: TokenData = Depends(get_current_user), db: Session = Depends(get_db)):
     current_user = services.get_user_by_username(db, current_user.username)
     return current_user
 
